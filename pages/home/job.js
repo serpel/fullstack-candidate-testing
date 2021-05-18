@@ -22,7 +22,7 @@ const Job = ({job}) => {
                             </div>
                             <div className="flex flex-row text-gray-500">
                                 <div className="flex-1"> 
-                                    {item['job_type']} | {salaryFormater(item['salary_range'])} an hour | {item['city']}
+                                    {item['job_type']} | {salaryFormater(item['salary_range'])} an hour | {item['city']} | {item['experience']}
                                 </div>
                                 <div className="flex-2">
                                     {dateToWords(item['created'])}
