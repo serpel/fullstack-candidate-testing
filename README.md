@@ -1,8 +1,10 @@
 # fullstack-candidate-testing
 
 ## Installing isntructions
-`yarn install`
-`yarn dev`
+``
+yarn install
+yarn dev
+``
 
 ## Challenge Instructions
 
