@@ -1,5 +1,5 @@
 import useSwr from 'swr';
-import LoadingSpinner from "../../components/loading_spinner";
+import LoadingSpinner from "../loading_spinner";
 import fetcher from '../../lib/fetcher'
 import Filter from "./filter";
 

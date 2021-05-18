@@ -1,8 +1,8 @@
-const Filter = ({name, filters, onFilterBy, filterOptions}) => {
+const Filter = ({name = "", filters = [], onFilterBy, filterOptions}) => {
 
-    var titleFormater = ((name) => name.replace('_', ' '));
+    const titleFormater = ((name) => name.replace('_', ' '));
 
-    var getFilter = ((term, item) => {  
+    const getFilter = ((term, item) => {  
         var filter = filterOptions[term];
         if(!filter) return <li onClick={() => onFilterBy(term, item.key)} className="hover:text-blue-400 my-2" key={item.key}>{item.key} <a className="text-gray-400">{item.doc_count}</a></li>;
         if(filter != item.key) return <li onClick={() => onFilterBy(term, item.key)} className="hover:text-blue-400 my-2" key={item.key}>{item.key} <a className="text-gray-400">{item.doc_count}</a></li>;

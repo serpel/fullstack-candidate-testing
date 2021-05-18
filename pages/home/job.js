@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { dateToWords } from '../../lib/date_helper'
 import { parseNameInitials } from '../../lib/string_helper'
 
-const Job = ({job}) => {
+const Job = ({job = {}}) => {
     const [isJobListingSelected, setJobListing] = useState(false);
 
     const handleJobListing = () => {
