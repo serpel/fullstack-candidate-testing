@@ -1,5 +1,9 @@
-const Filter = ({name = "", filters = [], onFilterBy, filterOptions}) => {
+import { useState } from "react";
+import FilterModal from './filtermodal';
 
+const Filter = ({name = "", filters = [], onFilterBy, filterOptions, maxFilters = 10}) => {
+
+    const [open, setOpen] = useState(false);
     const titleFormater = ((name) => name.replace('_', ' '));
 
     const getFilter = ((term, item) => {  
@@ -9,17 +13,21 @@ const Filter = ({name = "", filters = [], onFilterBy, filterOptions}) => {
         if(filter == item.key) return <li onClick={() => onFilterBy(term, item.key)} className="my-2 text-blue-400 font-semibold" key={item.key}>{item.key} <a className="text-gray-400">{item.doc_count}</a></li>; 
     });
 
+    const showMore = filters?.length > maxFilters ? <div onClick={() => setOpen(true)}><a href="#">Show More</a></div> : <></> ;
+
     return ( 
         <div className="p-4 max-w-md shadow-sm rounded bg-white mb-4">
             <div>
                 <h2 className="font-semibold text-lg uppercase">{titleFormater(name)}</h2>
                 <div className="text-gray-700 text-sm">
                     <ul>
-                        {filters.map((filter) => (
+                        {filters.slice(0, maxFilters).map((filter) => (
                             getFilter(name, filter)
                         ))}
+                        {showMore}
                     </ul>
                 </div>
+                <FilterModal filters={filters} isShowMoreSelected={open} onFilterClose={() => setOpen(false)} />
             </div>
         </div> 
     );
