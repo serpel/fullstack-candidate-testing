@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import { dateToWords } from '../../lib/date_helper'
 import { parseNameInitials } from '../../lib/string_helper'
+import JobDetail from './jobDetail'
 
 const Job = ({job = {}}) => {
     const [isJobListingSelected, setJobListing] = useState(false);
+    const [isJobDetailSelected, setJobDetail] = useState(false);
 
     const handleJobListing = () => {
         setJobListing(!isJobListingSelected);
+    }
+
+    const handleJobDetail = () => {
+        setJobDetail(!isJobDetailSelected);
     }
 
     const salaryFormater = (items) => items.map(item => `$${item}`).join(" - ");
@@ -15,7 +21,7 @@ const Job = ({job = {}}) => {
         <>           
             {job.items?.map((item) => 
                 <li className="dark:text-gray-200 justify-between py-3 border-b-2 border-gray-100 dark:border-gray-800 p-4">
-                    <div className="text-sm" onClick={handleJobListing}>
+                    <div className="text-sm" onClick={handleJobDetail}>
                         <span>
                             <div className="font-semibold">
                                 {item.job_title}
@@ -30,6 +36,7 @@ const Job = ({job = {}}) => {
                             </div>
                         </span>
                     </div>
+                    <JobDetail item={item} isJobDetailSelected = {isJobDetailSelected}/>
                 </li>
             )}
         </>
