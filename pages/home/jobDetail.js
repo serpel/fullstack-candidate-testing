@@ -1,4 +1,4 @@
-const JobDetail = ({item, isJobDetailSelected = false}) => {
+const JobDetail = ({item = {}, isJobDetailSelected = false}) => {
 
     if(!isJobDetailSelected) return <></>;
 
