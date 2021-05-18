@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { dateToWords } from '../../lib/date_helper';
 import { parseNameInitials } from '../../lib/string_helper';
-import JobDetail from './jobdetail';
+import Detail from './detail';
 
 const Job = ({job = {}}) => {
     const [isJobListingSelected, setJobListing] = useState(false);
@@ -36,7 +36,7 @@ const Job = ({job = {}}) => {
                             </div>
                         </span>
                     </div>
-                    <JobDetail item={item} isJobDetailSelected = {isJobDetailSelected}/>
+                    <Detail item={item} isJobDetailSelected = {isJobDetailSelected}/>
                 </li>
             )}
         </>
