@@ -1,6 +1,6 @@
 # fullstack-candidate-testing
 
-## Installing isntructions
+## Installing Instructions
 ```bash
 yarn install
 yarn dev
