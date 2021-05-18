@@ -1,6 +1,10 @@
 # fullstack-candidate-testing
 
-## Instructions
+## Installing isntructions
+`yarn install`
+`yarn dev`
+
+## Challenge Instructions
 
 
 1. Initialize a .git repo here. Then clone the main branch and use the following naming convention for the new branch: **firstname-lastname-YYYY-MM-DD**. If your name is John Doe, and today's date is 2021-01-17, then the new branch should be called **john-doe-2021-01-17**.
