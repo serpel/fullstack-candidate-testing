@@ -10,14 +10,20 @@ export default async (req, res) => {
   const sort = req.query.sort;
   const filter = req.query.filter;
 
-  var filteredJobs = applySearch(jobs, keyword);
-  filteredJobs = applyFilter(filteredJobs, filter);
-  filteredJobs = applySortBy(filteredJobs, sort);
+  console.log("-------------------------------------");
+
+  var searchJobs = applySearch(jobs, keyword);
+  var filteredJobs = applyFilter(searchJobs, filter);
+  const sortedJobs = applySortBy(filteredJobs, sort);
+
+  console.log(`Total Jobs: ${jobs?.length}`);
+  console.log(`Total Filtered Jobs: ${filteredJobs?.length}`);
+  console.log(`Total Sorted Jobs: ${sortedJobs?.length}`);
 
   // this timeout emulates unstable network connection, do not remove this one
   // you need to figure out how to guarantee that client side will render
   // correct results even if server-side can't finish replies in the right order
   await new Promise((resolve) => setTimeout(resolve, 1000 * Math.random()));
 
-  res.json({jobs: filteredJobs});
+  res.json({jobs: sortedJobs});
 }

@@ -1,4 +1,4 @@
-const Detail = ({item = {}, isJobDetailSelected = false}) => {
+const JobDetail = ({item = {}, isJobDetailSelected = false}) => {
 
     if(!isJobDetailSelected) return <></>;
 
@@ -41,4 +41,4 @@ const Detail = ({item = {}, isJobDetailSelected = false}) => {
     );
 }
  
-export default Detail;
+export default JobDetail;

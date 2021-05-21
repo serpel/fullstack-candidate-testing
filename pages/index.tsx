@@ -4,11 +4,9 @@ import FilterList from "./home/filterlist"
 import LoadingSpinner from "../components/loading_spinner"
 import ErrorMessage from "../components/error_message"
 import Search from "./home/search"
-import useSwr from 'swr'
+import useSwr, {mutate} from 'swr'
 import fetcher from '../lib/fetcher'
-import { createContext, useState } from "react";
-
-export const FilterContext = createContext("testing");
+import { createContext, useReducer, useState } from "react";
 
 const getSortType = ({state}) => {
     var sortType = "";
@@ -25,25 +23,34 @@ const getSortType = ({state}) => {
 
     return sortType;
   };
+
 const parseSortingTerms = ({terms}) => Object.entries(terms).map(([key, state]) => `${key}:${getSortType({state})}`);
 const parseFilterTerms = ({terms}) => Object.entries(terms).map(([key, value]) => `${key}:${value}`);
+const initialSortState = {
+  location: 2,
+  role: 2,
+  department: 2,
+  education: 2,
+  experience: 2
+};
+
+const initialFilterState = {};
 
 const Home = () => {
   const [keyword, setKeyword] = useState(""); 
-  const [sortingStatus, changeSortingStatus] = useState({
-    location: 2,
-    role: 2,
-    department: 2,
-    education: 2,
-    experience: 2
-  }); 
-  const [filterOptions, setFilterOptions] = useState({});
+  const [sortState, dispatchSort] = useReducer(sortReducer, initialSortState);
+  const [filterState, dispatchFilter ] = useReducer(filterByReducer, initialFilterState);
   const filters = ['location', 'role', 'department', 'education', 'experience'];
  
-  var filterString = parseFilterTerms({terms: filterOptions}).join(",");
-  var sortingString = parseSortingTerms({terms: sortingStatus}).join(",");
+  const filterString = parseFilterTerms({terms: filterState}).join(",");
+  const sortingString = parseSortingTerms({terms: sortState}).join(",");
+
+  const url = `/api/jobs?search=${keyword}` + 
+    (filterString ? `&filter=${filterString}` : filterString) + 
+    (sortingString ? `&sort=${sortingString}` : sortingString);
     
-  const { data, error } = useSwr(`/api/jobs?search=${keyword}&filter=${filterString}&sort=${sortingString}`, fetcher);
+  console.log(`Getting ${url}`);
+  const { data, error } = useSwr(url, fetcher);
 
   if(error) return <ErrorMessage message="Cannot load Jobs ..."></ErrorMessage>;
   if(!data) return <LoadingSpinner />;
@@ -52,24 +59,29 @@ const Home = () => {
     setKeyword(keyword);
   }
 
-  const handleFilterBy = (filterTerm: string, value:string) => {
-    console.log("filterTerm:"+ filterTerm + " filter value:"+value);
-
-    setFilterOptions(state => ({
-      ...state,
-      [filterTerm] : value
-    }));
+  const handleFilterBy = (item: any) => {   
+    console.log("clicked filterTerm:"+ item.key + " filter value:"+item.value);
+    dispatchFilter(item);
   }
 
   const handleSortBy = (sortTerm: string) => {
     console.log("clicked "+sortTerm);
+    dispatchSort(sortTerm);
+  }
 
-    var counter = sortingStatus[sortTerm];
+  function sortReducer (state: { [x: string]: any; }, term: string) { 
+    var counter = state[term];
     counter = counter == 2 ? 0 : counter + 1;
-    changeSortingStatus(state => ({
-      ...state,
-      [sortTerm]: counter
-    }));
+    return ({ ...state, [term]: counter});
+  }
+
+  function filterByReducer (state: { [x: string]: any; }, item: any) {
+    if(state[item.key] == item.value)
+    {
+      //deselect filter
+      return ({...state, [item.key]: ""})
+    }
+    return ({...state, [item.key]: item.value.replace("&", "")})
   }
 
   const { jobs } = data;
@@ -86,13 +98,12 @@ const Home = () => {
       <Search term={keyword} onSearch={handleSearch} />
       <main className="rounded relative h-full">
         <div className="flex items-start justify-between">
-          <FilterList onFilterBy={handleFilterBy} filterOptions={filterOptions} />
+          <FilterList onFilterBy={handleFilterBy} filterOptions={filterState} />
           <JobList 
             jobs={jobs} 
             onSortBy={handleSortBy} 
-            sortingStatus={sortingStatus} 
-            filterTerms={filters} />
-          
+            sortingStatus={sortState} 
+            filterTerms={filters} /> 
         </div>
       </main>
     </>
